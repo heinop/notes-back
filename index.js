@@ -1,7 +1,9 @@
 const express = require('express');
 const { response } = require('express');
-const app = express();
+const cors = require('cors');
 
+const app = express();
+app.use(cors());
 app.use(express.json());
 
 const requestLogger = (req, res, next) => {
@@ -84,6 +86,20 @@ app.post('/api/notes', (req, res) => {
   notes = notes.concat(note);
 
   res.json(note);
+});
+
+app.put('/api/notes/:id', (req,res) => {
+  const body = req.body;
+  const id = Number(req.params.id);
+
+  if (!notes.find(n => n.id === id)) {
+    return res.status(400).json({
+      error: `no note found with id ${id}`
+    });
+  }
+
+  notes = notes.map(n => n.id !== id ? n : body);
+  res.json(body);
 });
 
 const unknownEndpoint = (req, res) => {
