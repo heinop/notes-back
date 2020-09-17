@@ -87,7 +87,7 @@ app.post('/api/notes', (req, res) => {
   })
 });
 
-app.put('/api/notes/:id', (req,res) => {
+app.put('/api/notes/:id', (req, res, next) => {
   const body = req.body;
 
   const note = {
@@ -110,7 +110,7 @@ app.use(unknownEndpoint);
 const errorHandler = (error, req, res, next) => {
   console.error(error.message);
   if (error.name === 'CastError') {
-    return response.status(400).send({ error: 'malformatted id' });
+    return res.status(400).send({ error: 'malformatted id' });
   }
   next(error);
 };
