@@ -1,8 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const { response } = require('express');
 const cors = require('cors');
-const mongoose = require('mongoose');
 const Note = require('./models/note');
 
 const app = express();
@@ -51,14 +49,15 @@ app.get('/api/notes', (req, res) => {
 });
 
 app.get('/api/notes/:id', (req, res, next) => {
-  Note.findById(req.params.id).then(note => {
-    if (note) {
-      res.json(note);
-    } else {
-      res.status(404).end();
-    }
-  })
-  .catch(error => next(error));
+  Note.findById(req.params.id)
+    .then(note => {
+      if (note) {
+        res.json(note);
+      } else {
+        res.status(404).end();
+      }
+    })
+    .catch(error => next(error));
 });
 
 app.delete('/api/notes/:id', (req, res, next) => {
@@ -78,10 +77,10 @@ app.post('/api/notes', (req, res, next) => {
 
   const note = new Note({
     content: body.content,
-    important: body.important || false,
+    important: body.important || false,
     date: new Date()
   });
-  
+
   note.save()
     .then(savedNote => savedNote.toJSON())
     .then(savedAndFormattedNote => {
@@ -96,7 +95,7 @@ app.put('/api/notes/:id', (req, res, next) => {
   const note = {
     content: body.content,
     important: body.important
-  }
+  };
 
   Note.findByIdAndUpdate(req.params.id, note, { new: true })
     .then(updatedNote => {
@@ -106,7 +105,7 @@ app.put('/api/notes/:id', (req, res, next) => {
 });
 
 const unknownEndpoint = (req, res) => {
-  res.status(404).send({error: 'unknown endpoint'});
+  res.status(404).send({ error: 'unknown endpoint' });
 };
 app.use(unknownEndpoint);
 
