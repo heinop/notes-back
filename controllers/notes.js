@@ -4,7 +4,7 @@ const Note = require('../models/note');
 // Get all notes
 notesRouter.get('/', (request, response) => {
   Note.find({}).then(notes => {
-    request.json(notes.map(note => note.toJSON()));
+    response.json(notes.map(note => note.toJSON()));
   });
 });
 
