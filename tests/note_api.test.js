@@ -1,10 +1,13 @@
 const mongoose = require('mongoose');
 const supertest = require('supertest');
+const jwt = require('jsonwebtoken');
 const helper = require('./test_helper');
 const app = require('../app');
-const Note = require('../models/note');
 
 const api = supertest(app);
+
+const Note = require('../models/note');
+const User = require('../models/user');
 
 describe('when there is initially some notes saved', () => {
 
