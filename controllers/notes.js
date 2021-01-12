@@ -5,6 +5,7 @@ const User = require('../models/user');
 
 const getTokenFrom = request => {
   const authorization = request.get('authorization');
+
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
     return authorization.substring(7);
   }
@@ -35,6 +36,7 @@ notesRouter.post('/', async (request, response, next) => {
   const body = request.body;
 
   const token = getTokenFrom(request);
+
   const decodedToken = jwt.verify(token, process.env.SECRET);
   if (!token || !decodedToken.id) {
     return response.status(401).json({ error: 'invalid or missing token' });
@@ -62,8 +64,9 @@ notesRouter.delete('/:id', async (request, response, next) => {
 });
 
 // Update note
-notesRouter.put('/id', async (request, response, next) => {
+notesRouter.put('/:id', async (request, response, next) => {
   const body = request.body;
+  console.log('update note:', body);
 
   const note = {
     content: body.content,
